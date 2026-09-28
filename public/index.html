@@ -119,9 +119,13 @@
       <div class="w-25 d-flex justify-content-end">
 
         <div class="dropdown">
-          <button class="btn btn-outlinesecondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <i class="bi bi-list"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+              viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+            </svg>
           </button>
           <ul class="dropdown-menu">
             <li><button class="dropdown-item" type="button" data-bs-toggle="collapse" data-bs-target="#occupancy-menu"
@@ -132,9 +136,7 @@
             <li><button class="dropdown-item" type="button" id="assignToUser">Assign to user</button></li>
           </ul>
         </div>
-        <!-- <button type="button" class="btn btn-outline-secondary" id="selectButton" aria-label="View List">
-          <i class="bi bi-list"></i>
-        </button> -->
+
       </div>
     </div>
     <div class="collapse" id="legend-collapse" aria-labelledby="legend-collapse">
@@ -148,10 +150,10 @@
     </div>
 
     <div class="collapse" id="occupancy-menu">
-   
+
     </div>
     <div class="collapse" id="cleaning-menu">
-    
+
     </div>
 
     <div class="tab-content" id="myTabContent">
