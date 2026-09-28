@@ -1,0 +1,70 @@
+/* Container wrapper to constrain height and allow scrolling */
+.table-freeze-container {
+  max-height: 700px; /* Adjust based on your layout needs */
+  overflow: auto;
+}
+
+/* 1. Freeze the top row (thead) */
+.table-freeze-container thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Required: prevents data transparency behind it */
+  z-index: 2; /* Keeps the header row on top of the scrolling body cells */
+}
+
+/* 2. Freeze the first column */
+.table-freeze-container .freeze-col {
+  position: sticky;
+  left: 0;
+  background-color: #fff; /* Required: prevents data transparency behind it */
+  z-index: 1; /* Low layer priority so header overlays it when scrolling down */
+}
+
+/* 3. Freeze the top-left intersecting corner cell */
+.table-freeze-container thead th.freeze-row-th {
+  z-index: 3; /* Highest priority: must overlay both frozen row and frozen column */
+}
+
+
+
+/* When the button has the .collapsed class (meaning content is hidden) */
+.btn.collapsed .toggle-icon::before {
+  content: "+";
+  margin-left: 5px;
+}
+
+/* When the content is expanded (visible), show the minus sign */
+.btn:not(.collapsed) .toggle-icon::before {
+  content: "−"; /* Using a proper minus sign character */
+  margin-left: 5px;
+}
+
+.fade-item {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* The final visible state */
+.fade-item.fading {
+  opacity: 0;
+}
+/* Remove the dropdown arrow for all toggle buttons */
+.dropdown-toggle::after {
+    content: none !important; /* OR display: none !important; */
+}
+  
+
+.btn-outline-success {
+  --bs-btn-color: #000000 !important;              /* Initial text and border color */
+  --bs-btn-border-color: #00000000 !important; 
+  
+  --bs-btn-hover-color: #000000 !important;            /* Text color on hover */
+  --bs-btn-hover-bg: #00000000 !important;            /* Background color on hover */
+  --bs-btn-hover-border-color: #00000000 !important;  /* Border color on hover */
+  
+  --bs-btn-active-color: #000000 !important;           /* Active/Clicked text color */
+  --bs-btn-active-bg: #00000000 !important;           /* Active/Clicked background */
+  --bs-btn-active-border-color: #ff0000 !important; /* Active/Clicked border */
+  
+  --bs-btn-focus-shadow-rgb: 255, 0, 0 !important;/* RGB focus ring shadow color */
+}

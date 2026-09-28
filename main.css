@@ -1,0 +1,22 @@
+/* CSS Mobile-First Layout (Default Stacking) */
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Stacks items vertically into 1 column */
+  gap: 16px;                  /* Spaces out the stacked cells */
+}
+
+/* Tablet & Desktop Layout (Changes to 3 Columns) */
+@media (min-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns side-by-side */
+  }
+}
+
+/* Optional styling for visibility */
+.grid-item {
+  border-radius: 8px; 
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+}

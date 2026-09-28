@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning App</title>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+    <script src="js/common.js" type="text/javascript"></script>
+
+    <script src="js/users.js" type="text/javascript" defer></script>
+    <script src="js/uploads.js" type="text/javascript" defer></script>
+    <script src="js/states.js" type="text/javascript" defer></script>
+
+
+</head>
+
+<body style="background-color: #eee">
+    <nav class="navbar navbar-expand sticky-top bg-light">
+        <div class="container" style="max-width: 950px">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand d-none d-md-block" href="#">
+                <img class="px-2" src="bootstrap-icons-1.13.1/clipboard-check.svg" alt="" height="30">FRC
+            </a>
+
+            <!-- Toggler for Mobile View -->
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button> -->
+
+            <!-- Links always stay inline, even on small screens -->
+            <div class="container" style="max-width: 600px;">
+                <ul class="nav nav-underline nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="index.html">Map</a>
+                    </li>
+                    <!--<li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mapView-tab" data-bs-toggle="tab" data-bs-target="#mapView"
+                            type="button" role="tab" aria-controls="mapView" aria-selected="true">Map</button>
+                    </li>-->
+                    <!-- <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="listView-tab" data-bs-toggle="tab" data-bs-target="#listView"
+                            type="button" role="tab" aria-controls="listView" aria-selected="false">List</button>
+                    </li> -->
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link disabled" href="index.html">List</a>
+                    </li>
+                    </li>
+                    <a class="nav-link" href="#">Plan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="configuration.html">
+                            <span class="d-inline d-md-none">Config</span>
+
+                            <!-- This text shows ONLY on desktop (hidden on mobile, blocks/inlines on medium screens and up) -->
+                            <span class="d-none d-md-inline">Configuration</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- <ul class="navbar-nav mb-lg-0"> -->
+            <div>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown me-auto">
+                        <a class="nav-link dropdown-toggle py-1" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- <div class="profile-pic">
+              <img src="https://source.unsplash.com/250x250?girl" alt="Profile">
+            </div> -->
+                            <!-- You can also use icon as follows: -->
+                            <!--  <i class="fas fa-user"></i> -->
+                            <div class="d-inline-flex bg-primary placeholder text-white rounded-circle align-items-center justify-content-center fw-bold"
+                                style="width: 40px; height: 40px ">
+                                JD
+                            </div>
+
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <!-- <li><a class="dropdown-item" href="#"><i class="fas fa-sliders-h fa-fw"></i> Account</a></li> -->
+                            <!-- <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li> -->
+                            <li><a class="dropdown-item" href="#"></i> Account</a></li>
+                            <li><a class="dropdown-item" href="#"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <!-- <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>-->
+                            <li><a class="dropdown-item" href="#"></i> Log Out</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="my-2">
+            <!-- <h3 class="text-center">Configuration</h3> -->
+        </div>
+        <div class="card">
+            <div class="card-header">
+
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button id="uploads-nav-button" class="nav-link active" data-bs-toggle="tab"
+                            data-bs-target="#Uploads" type="button" role="tab" aria-controls="Uploads"
+                            aria-selected="true">Uploads</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button id="users-nav-button" class="nav-link" data-bs-toggle="tab" data-bs-target="#users"
+                            type="button" role="tab" aria-controls="users" aria-selected="false">Users</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button id="states-nav-button" class="nav-link" data-bs-toggle="tab" data-bs-target="#states"
+                            type="button" role="tab" aria-controls="states" aria-selected="false">States</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button id="settings-nav-button" class="nav-link" data-bs-toggle="tab"
+                            data-bs-target="#settings" type="button" role="tab" aria-controls="settings"
+                            aria-selected="false">Settings</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="outerTabContent">
+                    <div class="tab-pane fade show active" id="Uploads" role="tabpanel"
+                        aria-labelledby="uploads-nav-button">
+
+                        <!-- Uploads -->
+
+
+                        <div class="py-2">
+                            <label for="file-input" class="form-label">Preview CampBrain csv file</label>
+                            <input class="form-control" type="file" id="file-input">
+                            <div class="py-2">
+                                <div id="alert-element" class="alert alert-warning alert-dismissible fade show d-none"
+                                    role="alert">
+                                    <span id="alert-text"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="hidden-div" class="d-none">
+
+                            <div class="py-2">
+                                <button type="button" class="btn btn-primary upload-csv-button">
+                                    <span id="uploadBtnSpinner" class="spinner-border spinner-border-sm d-none"
+                                        role="status" aria-hidden="true"></span>Upload raw csv and
+                                    occupancy data
+                                </button>
+                                <button type="button" class="btn btn-secondary preview-button">Close Preview</button>
+                            </div>
+                            <nav>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button id="raw-csv-nav-button" class="nav-link" data-bs-toggle="tab"
+                                            data-bs-target="#raw-csv" type="button" role="tab" aria-controls="raw-csv"
+                                            aria-selected="false">Raw csv</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button id="parsed-csv-nav-button" class="nav-link active" data-bs-toggle="tab"
+                                            data-bs-target="#parsed-csv" type="button" role="tab"
+                                            aria-controls="parsed-csv" aria-selected="true">Parsed csv</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button id="occupancy-data-nav-button" class="nav-link" data-bs-toggle="tab"
+                                            data-bs-target="#occupancy-data" type="button" role="tab"
+                                            aria-controls="occupancy-data" aria-selected="true">cbr id to
+                                            Occupancy</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button id="csv-legend-nav-button" class="nav-link" data-bs-toggle="tab"
+                                            data-bs-target="#csv-legend" type="button" role="tab"
+                                            aria-controls="csv-legend" aria-selected="false">Legend</button>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="tab-content" id="innerTabContent">
+                                <div class="tab-pane fade" id="raw-csv" role="tabpanel"
+                                    aria-labelledby="raw-csv-nav-button">
+                                    <div class="mt-2">
+                                        <div id="csv-contents">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show active" id="parsed-csv" role="tabpanel"
+                                    aria-labelledby="parsed-csv-nav-button">
+                                    <div class="mt-2">
+                                        <div id="parsed-csv-contents">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="occupancy-data" role="tabpanel"
+                                    aria-labelledby="occupancy-data-nav-button">
+                                    <div class="mt-2">
+                                        <div id="occupancy-data-contents">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="csv-legend" role="tabpanel"
+                                    aria-labelledby="csv-legend-nav-button">
+                                    <div class="mt-2">
+                                        <div id="csv-legend-contents">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-2">
+                                <button type="button" class="btn btn-primary upload-csv-button">Upload csv and occupancy
+                                    data</button>
+                                <button type="button" class="btn btn-secondary preview-button">Close Preview</button>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div>
+                                <h6>Uploaded files</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="uploadsTable"
+                                    class="table table-hover table-striped table-bordered align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="ps-4">File name</th>
+                                            <th scope="col">Month</th>
+                                            <th scope="col">Date uploaded</th>
+                                            <th scope="col" class="text-end pe-4">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="py-2 d-flex justify-content-between align-items-center">
+
+                                <small id="upload-table-count" class="text-muted"></small>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>Dates are obtained from the first line that contains the text "1,2,3". The first comma separated value in that line
+                                        must contain month and year like so: Sep-2026, Sep-26, 2026-09,
+                                        2026-Sep. The separator can also be space, comma, or slash</p>
+                                    <p>Occupancy data is obtained from lines that contain text "Room" (case insensitive).
+                                        Values like XX, XY, X, -, (called 'cbr_id's here) are mapped to occupancy states according to
+                                        the occupancy states table.</p>
+                                    <p>The legend is extracted from the first line enclosed by double quotes which contains the text "Legend".</p>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-nav-button">
+
+                        <!-- Users -->
+
+
+                        <div class="mt-2">
+                            <div class="table-responsive">
+                                <table id="userTable"
+                                    class="table table-bordered table-hover table-striped align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="ps-4 w-25">Name</th>
+                                            <th scope="col" class="w-25">Initials<span class="text-danger">&nbsp*</span>
+                                            </th>
+                                            <th scope="col" class="w-25">Avatar Color</th>
+                                            <th scope="col" class="text-end pe-4 w-25">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-danger"><small>* required, must be unique</small></div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small id="user-table-count" class="text-muted"></small>
+                                <button type="button" class="btn btn-primary btn-sm rounded-2" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFormUser">Add New User</button>
+
+                            </div>
+                            <div class="collapse mt-2" id="collapseFormUser">
+                                <div class="card card-body">
+                                    <!-- The Form -->
+                                    <form id="userForm">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <label for="inlineName" class="form-label">Name</label>
+                                                <input type="text" class="form-control" id="name">
+                                            </div>
+                                            <div class="col">
+                                                <label for="inlineName" class="form-label">Initials<span
+                                                        class="text-danger">&nbsp*</span></label>
+                                                <input type="text" class="form-control" id="initials" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="themeColorPicker" class="form-label">Avatar color</label>
+                                                <input type="color" class="form-control form-control-color"
+                                                    id="avatar-color" value="#563d7c" title="Choose avatar color">
+                                            </div>
+                                            <div class="col text-end">
+                                                <button id="add-user" type="submit" class="btn btn-primary">
+                                                    <span id="userFormBtnSpinner"
+                                                        class="spinner-border spinner-border-sm d-none" role="status"
+                                                        aria-hidden="true"></span>
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="states" role="tabpanel" aria-labelledby="states-nav-button">
+
+                        <!-- States -->
+
+                        <!-- occupancy states -->
+
+                        <div class="py-2">
+                            <h5>Occupancy States</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="occupancyTable" class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="ps-4">Properties and values</th>
+                                        <th scope="col" class="text-end pe-4">Preview/Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- User Row 1 -->
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="small text-danger">* required for csv parsing (cbr id -> state)</div>
+                        <div class="small text-primary">** required, must be unique</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small id="occupancy-table-count" class="text-muted"></small>
+                            <button type="button" class="btn btn-primary btn-sm rounded-2" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFormOccupancy">Add New Occupancy State</button>
+
+                        </div>
+                        <div class="collapse mt-2" id="collapseFormOccupancy">
+                            <div class="card card-body">
+                                <!-- The Form -->
+                                <form id="occupancyForm">
+                                    <div>
+                                        <label for="inlineName" class="form-label">State<span
+                                                class="text-primary">&nbsp**</span></label>
+                                        <input type="text" class="form-control" id="occupancy-state" required>
+
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">cbr id<span
+                                                class="text-danger">&nbsp*</span></label>
+                                        <input type="text" class="form-control" value="n/a" id="occupancy-cbr-id"
+                                            required>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Abbreviation</label>
+                                        <input type="text" class="form-control" id="occupancy-abbreviation">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Priority</label>
+                                        <input type="number" class="form-control" id="occupancy-priority">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="occupancy-description">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="themeColorPicker" class="form-label">Background color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="occupancy-background-color" value="#ffffff"
+                                            title="Choose background color">
+                                    </div>
+                                    <div class="pt-2">
+                                        <input class="form-check-input" type="checkbox" value="" id="occupancy-border">
+                                        <label class="form-check-label" for="occupancy-border">Add 5-pixel
+                                            border</label>
+                                    </div>
+                                    <div class="pt-2">
+                                        <label for="themeColorPicker" class="form-label">Border color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="occupancy-border-color" value="#563d7c" title="Choose border color">
+                                    </div>
+                                    <div class="pt-2">
+                                        <input class="form-check-input" type="checkbox" value="" id="occupancy-stripes">
+                                        <label class="form-check-label" for="occupancy-border">Add diagonal
+                                            stripes</label>
+                                    </div>
+                                    <div class="pt-2">
+                                        <label for="themeColorPicker" class="form-label">Stripes color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="occupancy-stripes-color" value="" title="Choose stripes color">
+
+                                    </div>
+                                    <div class="pt-2">
+                                        <button id="add-occupancy-state" type="submit" class="btn btn-primary">
+                                            <span id="occupancyFormBtnSpinner"
+                                                class="spinner-border spinner-border-sm d-none" role="status"
+                                                aria-hidden="true"></span>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="py-2">
+                        </div>
+                        <div class="card">
+                                <div class="card-body">
+                                    <p> To show both occupancy and cleaning states in a rectangle, the rectange for cleaning state is made smaller with padding so that occupancy shows as a border</p>
+                                </div>
+                            </div>  
+                        <!-- cleaning states -->
+
+                        <div class="pt-4">
+                            <h5>Cleaning States</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="cleaningTable" class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="ps-4">Properties and values</th>
+                                        <th scope="col" class="text-end pe-4">Preview / Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- User Row 1 -->
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="small text-primary">** required, must be unique</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small id="cleaning-table-count" class="text-muted"></small>
+                            <button type="button" class="btn btn-primary btn-sm rounded-2" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFormCleaning">Add New Cleaning State</button>
+
+                        </div>
+                        <div class="collapse mt-2" id="collapseFormCleaning">
+                            <div class="card card-body">
+                                <!-- The Form -->
+                                <form id="cleaningForm">
+
+                                    <div>
+                                        <label for="inlineName" class="form-label">State<span
+                                                class="text-primary">&nbsp**</span></label>
+                                        <input type="text" class="form-control" id="cleaning-state" required>
+
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Abbreviation</label>
+                                        <input type="text" class="form-control" id="cleaning-abbreviation">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Priority</label>
+                                        <input type="number" class="form-control" id="cleaning-priority">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="inlineName" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="cleaning-description">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="themeColorPicker" class="form-label">Background color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="cleaning-background-color" value="#ffffff"
+                                            title="Choose background color">
+                                    </div>
+                                    <div class="pt-2">
+                                        <input class="form-check-input" type="checkbox" value="" id="cleaning-border">
+                                        <label class="form-check-label" for="cleaning-border">Add 5-pixel border</label>
+                                    </div>
+                                    <div class="pt-2">
+                                        <label for="themeColorPicker" class="form-label">Border color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="cleaning-border-color" value="#563d7c" title="Choose border color">
+                                    </div>
+                                    <div class="pt-2">
+                                        <input class="form-check-input" type="checkbox" value="" id="cleaning-stripes">
+                                        <label class="form-check-label" for="cleaning-border">Add diagonal
+                                            stripes</label>
+                                    </div>
+                                    <div class="pt-2">
+                                        <label for="themeColorPicker" class="form-label">Stripes color</label>
+                                        <input type="color" class="form-control form-control-color form-check-inline"
+                                            id="cleaning-stripes-color" value="" title="Choose stripes color">
+
+                                    </div>
+                                    <div class="pt-2">
+                                        <button id="add-cleaning-state" type="submit" class="btn btn-primary">
+                                            <span id="cleaningFormBtnSpinner"
+                                                class="spinner-border spinner-border-sm d-none" role="status"
+                                                aria-hidden="true"></span>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-nav-button">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <button onclick="myFunction()">Click me</button>-->
+    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    Are you sure you want to proceed?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="confirmCancelBtn">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script> -->
+</body>
+
+</html>
