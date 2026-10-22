@@ -1,5 +1,6 @@
 const currentDateString = dateToDateString(new Date());
 
+
 document.addEventListener("DOMContentLoaded", async () => {
     //console.log("DOM fully parsed and ready!");
     const specificSheet = document.getElementById("theme-styles").sheet;
@@ -212,11 +213,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     function renderRooms(fadeBetweenRefreshes) {
         const roomIdByLayoutRoomId = { 1: "Room_1", 2: "Room_2", 3: "Room_3", 4: "Room_4", 5: "Room_5", 6: "Room_6", 7: "Room_7", 8: "Room_8", 9: "Room_9", 10: "Room_10", 11: "Room_11", 12: "Room_12", 13: "Room_13", 14: "Room_14", 16: "Room_16", 17: "Room_17", 18: "Room_18", 19: "Room_19", 20: "Room_20", 21: "Room_21", 22: "Room_22", 23: "Room_23", 24: "Room_24", 25: "Room_25", 26: "Room_26", 28: "Room_28", 29: "Room_29", 30: "Room_30", 31: "Room_31", 32: "Room_32", 33: "Room_33", 34: "Room_34", 35: "Room_35", 36: "Room_36", "ST": "Room_27" };
 
-        const francisPlace2ndFloorLayout = [["Francis Place, 2nd Floor"], [12, 10, 8, 6, 5, "-"], [11, 9, 7, "-", 3, 4], ["-", "-", "-", "-", 1, 2]];
+        //const francisPlace2ndFloorLayout = [["Francis Place, 2nd Floor"], [12, 10, 8, 6, 5, "-"], [11, 9, 7, "-", 3, 4], ["-", "-", "-", "-", 1, 2]];
+        const francisPlace2ndFloorLayout = [["Francis Place, 2nd Floor"], ["-",12, 10, 8, 6, 5], ["-",11, 9, 7, "-", "-",], ["-", "-", "-", "-", 3, 4], ["-", "-", "-", "-", 1, 2]];
+        
         const marianHall1stFloorLayout = [["Marian Hall, 1st Floor"], [24, 22, 20, 18, "-", 16], [23, 21, 19, 17, "-", "HK"], ["-", "-", "-", "-", 13, 14]];
         const marianHall2ndFloorLayout = [["Marian Hall, 2nd Floor"], [36, 34, 32, 30, "-", 28], [35, 33, 31, 29, "-", "ST"], ["-", "-", "-", "-", 25, 26]];
 
         const francisPlace2ndFloorList = ["Francis Place, 2nd Floor", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        
         const marianHall1stFloorList = ["Marian Hall, 1st Floor", 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         const marianHall2ndFloorList = ["Marian Hall, 2nd Floor", 25, 26, "ST", 28, 29, 30, 31, 32, 33, 34, 35];
 

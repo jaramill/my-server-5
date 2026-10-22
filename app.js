@@ -41,6 +41,7 @@ function initializeDatabase() {
                 csv_name TEXT NOT NULL,
                 csv_month TEXT NOT NULL UNIQUE,
                 csv_data BLOB NOT NULL,
+                csv_date_generated TEXT,
                 date_modified TEXT DEFAULT CURRENT_TIMESTAMP    
             );
         `);
@@ -250,7 +251,7 @@ app.put('/api/users/update/:id', (req, res) => {
 
 // Get all csvs
 app.get('/api/csvs', (req, res) => {
-    db.all("SELECT id, csv_name, csv_month, date_modified FROM csvs", [], (err, rows) => {
+    db.all("SELECT id, csv_name, csv_month, csv_date_generated, date_modified FROM csvs", [], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -261,7 +262,7 @@ app.get('/api/csvs', (req, res) => {
 // Get one csv
 app.get('/api/csvs/:id', (req, res) => {
     const { id } = req.params;
-    const sql = `SELECT csv_name, csv_month, date_modified, csv_data FROM csvs WHERE id = ?`;
+    const sql = `SELECT csv_name, csv_month, csv_date_generated, date_modified, csv_data FROM csvs WHERE id = ?`;
     db.get(sql, [id], (err, row) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -306,14 +307,14 @@ app.get('/api/csvs/check/:csvMonth', (req, res) => {
 
 // 2. Upload csv
 app.post('/api/csvs', (req, res) => {
-    const { csvName, csvMonth, csvString } = req.body;
+    const { csvName, csvMonth, csvDateGenerated, csvString } = req.body;
 
-    if (!csvName && !csvMonth && !csvString) {
+    if (!csvName && !csvMonth && !csvDateGenerated && !csvString) {
         res.status(400).json({ error: "missing data" });
         return;
     }
-    const sql = "INSERT OR REPLACE INTO csvs (csv_name, csv_month, csv_data) VALUES (?, ?, ?) RETURNING id, csv_name, csv_month, date_modified";
-    db.get(sql, [csvName, csvMonth, csvString], function (err, newEntry) {
+    const sql = "INSERT OR REPLACE INTO csvs (csv_name, csv_month, csv_date_generated, csv_data) VALUES (?, ?, ?, ?) RETURNING id, csv_name, csv_month, csv_date_generated, date_modified";
+    db.get(sql, [csvName, csvMonth, csvDateGenerated, csvString], function (err, newEntry) {
         if (err) {
             res.status(400).json({ error: err.message });
             return;

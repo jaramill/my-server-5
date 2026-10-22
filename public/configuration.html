@@ -27,7 +27,12 @@
         <div class="container" style="max-width: 950px">
             <!-- Brand/Logo -->
             <a class="navbar-brand d-none d-md-block" href="#">
-                <img class="px-2" src="bootstrap-icons-1.13.1/clipboard-check.svg" alt="" height="30">FRC
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                </svg>
+                FRC
             </a>
 
             <!-- Toggler for Mobile View -->
@@ -150,14 +155,13 @@
                                 </div>
                             </div>
                         </div>
-
                         <div id="hidden-div" class="d-none">
 
                             <div class="py-2">
                                 <button type="button" class="btn btn-primary upload-csv-button">
                                     <span id="uploadBtnSpinner" class="spinner-border spinner-border-sm d-none"
-                                        role="status" aria-hidden="true"></span>Upload raw csv and
-                                    occupancy data
+                                        role="status" aria-hidden="true"></span>Upload csv and
+                                    occupancy
                                 </button>
                                 <button type="button" class="btn btn-secondary preview-button">Close Preview</button>
                             </div>
@@ -166,17 +170,17 @@
                                     <li class="nav-item" role="presentation">
                                         <button id="raw-csv-nav-button" class="nav-link" data-bs-toggle="tab"
                                             data-bs-target="#raw-csv" type="button" role="tab" aria-controls="raw-csv"
-                                            aria-selected="false">Raw csv</button>
+                                            aria-selected="false">csv</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button id="parsed-csv-nav-button" class="nav-link active" data-bs-toggle="tab"
                                             data-bs-target="#parsed-csv" type="button" role="tab"
-                                            aria-controls="parsed-csv" aria-selected="true">Parsed csv</button>
+                                            aria-controls="parsed-csv" aria-selected="true">Parsed</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button id="occupancy-data-nav-button" class="nav-link" data-bs-toggle="tab"
                                             data-bs-target="#occupancy-data" type="button" role="tab"
-                                            aria-controls="occupancy-data" aria-selected="true">cbr id to
+                                            aria-controls="occupancy-data" aria-selected="true">
                                             Occupancy</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -218,8 +222,28 @@
                             </div>
                             <div class="py-2">
                                 <button type="button" class="btn btn-primary upload-csv-button">Upload csv and occupancy
-                                    data</button>
+                                    </button>
                                 <button type="button" class="btn btn-secondary preview-button">Close Preview</button>
+                            </div>
+                        </div>
+
+                        <div class="py-2">
+                            <label for="file-input-multiple" class="form-label">Upload multiple files</label>
+                            <input class="form-control" type="file" id="file-input-multiple" multiple>
+                            <div class="py-2">
+                                <div id="alert-element-multiple" class="alert alert-warning alert-dismissible fade show d-none"
+                                    role="alert">
+                                    <span id="alert-text-multiple"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hidden-div-multiple" class="d-none">
+                             <div class="py-2">
+                                    <span id="multiple-file-message"></span>
+                                    <span id="uploadBtnSpinnerMultiple" class="spinner-border spinner-border-sm d-none"
+                                        role="status" aria-hidden="true"></span>
                             </div>
                         </div>
                         <div class="mt-2">
@@ -233,6 +257,7 @@
                                         <tr>
                                             <th scope="col" class="ps-4">File name</th>
                                             <th scope="col">Month</th>
+                                            <th scope="col">Date Generated</th>
                                             <th scope="col">Date uploaded</th>
                                             <th scope="col" class="text-end pe-4">Actions</th>
                                         </tr>

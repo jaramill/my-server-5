@@ -29,13 +29,13 @@
 
 /* When the button has the .collapsed class (meaning content is hidden) */
 .btn.collapsed .toggle-icon::before {
-  content: "+";
+  content: "\25B8";
   margin-left: 5px;
 }
 
 /* When the content is expanded (visible), show the minus sign */
 .btn:not(.collapsed) .toggle-icon::before {
-  content: "−"; /* Using a proper minus sign character */
+  content: "\25BE"; /* Using a proper minus sign character */
   margin-left: 5px;
 }
 

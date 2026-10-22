@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableHTML += makeUploadHtml(upload);
     });
     uploadsTableBody.innerHTML = tableHTML;
-    
+
     document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
- 
+
 });
 
 // Add your custom JavaScript logic when clicked
@@ -29,27 +29,26 @@ document.getElementById('uploads-nav-button').addEventListener('click', async fu
         tableHTML += makeUploadHtml(upload);
     });
     uploadsTableBody.innerHTML = tableHTML;
-    
+
     document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
 
 });
 async function fetchUploads() {
-     try {
-        console.log(`/api/csvs`);
+    try {
         const response = await fetch(`/api/csvs`);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const uploads = await response.json();
 
         return uploads;
-         } catch (error) {
+    } catch (error) {
         console.error('Error fetching uploads:', error);
     };
 }
 
-function makeUploadHtml (upload){
+function makeUploadHtml(upload) {
     const uploadHtml = `
         <tr data-id="${upload.id}">
             <td class="ps-4">
@@ -58,6 +57,10 @@ function makeUploadHtml (upload){
             </td>
             <td>
                 <div data-field="csv_month">${upload.csv_month}
+                </div>
+            </td>
+            <td>
+                <div data-field="csv_date_generated">${upload.csv_date_generated}
                 </div>
             </td>
             <td>
@@ -89,8 +92,8 @@ async function viewUpload(id) {
                 element.classList.add('d-none');
             };
             hiddenDiv.classList.remove('d-none'); // Show the div
-            
-            let csvObject = {'csvName': null, 'csvString': null};
+
+            let csvObject = { 'csvName': null, 'csvString': null };
 
             csvObject.csvString = data.csv_data;
             document.getElementById("csv-contents").innerHTML = csvToHtmlTable(csvObject);
@@ -100,12 +103,12 @@ async function viewUpload(id) {
             let result = null;
             let parsedObject = {};
             [result, parsedObject] = parseCsv(csvObject);
-           
+
             document.getElementById("parsed-csv-contents").innerHTML = parsedObjectToHtmlTable(parsedObject);
             const occupancyStateByCbrId = await getOccupancyStateByCbrId();
             document.getElementById("occupancy-data-contents").innerHTML = parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId);
             document.getElementById("csv-legend-contents").innerHTML = extractLegend(csvObject);
-             
+
 
         };
     } catch (error) {
@@ -118,9 +121,9 @@ async function deleteCsvAndOccupancy(id) {
     const spinner = document.getElementById(`upload${id}DeleteBtnSpinner`);
 
     const confirmed = await showConfirmModal("Are you sure you want to delete this record?");
-    
+
     //if (confirm("Are you sure you want to delete this csv and its data from the occupancy table?")) {
-        // Action to take if user clicked OK
+    // Action to take if user clicked OK
     if (confirmed) {
         try {
             spinner.classList.remove("d-none");
@@ -142,15 +145,15 @@ async function deleteCsvAndOccupancy(id) {
                 const uploadsTableBody = uploadsTable.getElementsByTagName("tbody")[0];
                 uploadsTable.querySelector(`[data-id="${id}"]`).remove();
                 document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
-                
+
             };
         } catch (error) {
             console.error('Error:', error);
         } finally {
-                spinner.classList.add("d-none");
+            spinner.classList.add("d-none");
 
         };
-        
+
     } else {
         // Action to take if user clicked Cancel
         console.log("Action canceled.");
@@ -158,7 +161,13 @@ async function deleteCsvAndOccupancy(id) {
 }
 
 document.getElementById("file-input").addEventListener("change", handleFileSelection);
+
+document.getElementById("file-input-multiple").addEventListener("change", handleMultipleFileSelection);
+
 const hiddenDiv = document.getElementById('hidden-div');
+
+const hiddenDivMultiple = document.getElementById('hidden-div-multiple');
+const multipleMessage = document.getElementById('multiple-file-message');
 
 const uploadButtons = document.getElementsByClassName("upload-csv-button");
 
@@ -168,7 +177,7 @@ async function handleFileSelection(event) {
 
     let roomOccupancyByDate = {};
 
-    let csvObject = {'csvName': null, csvString: null};
+    let csvObject = { 'csvName': null, csvString: null };
 
     const file = event.target.files[0];
 
@@ -177,7 +186,7 @@ async function handleFileSelection(event) {
         const alertElement = document.getElementById("alert-element");
         alertElement.classList.remove('d-none');
         document.getElementById("alert-text").innerText = `No file selected. Please choose a file`;
-        
+
         return;
     }
 
@@ -185,7 +194,7 @@ async function handleFileSelection(event) {
         const alertElement = document.getElementById("alert-element");
         alertElement.classList.remove('d-none');
         document.getElementById("alert-text").innerText = `Unsupported file type. Please select a text file`;
-        
+
         return;
     }
     const extension = file.name.split('.').pop().toLowerCase();
@@ -196,7 +205,7 @@ async function handleFileSelection(event) {
         const alertElement = document.getElementById("alert-element");
         alertElement.classList.remove('d-none');
         document.getElementById("alert-text").innerText = `File extension must be csv`;
-        
+
         return;
     } else {
         csvObject.csvName = file.name;
@@ -216,24 +225,22 @@ async function handleFileSelection(event) {
             let result = null;
             let parsedObject = {};
             [result, parsedObject] = parseCsv(csvObject);
-            if (result!=="success"){
+            if (result !== "success") {
                 const alertElement = document.getElementById("alert-element");
                 alertElement.classList.remove('d-none');
                 document.getElementById("alert-text").innerText = `${result}`;
-        
-            } else{
+
+            } else {
                 document.getElementById("parsed-csv-contents").innerHTML = parsedObjectToHtmlTable(parsedObject);
                 const occupancyStateByCbrId = await getOccupancyStateByCbrId();
                 document.getElementById("occupancy-data-contents").innerHTML = parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId);
                 roomOccupancyByDate = parsedObjectToOccupancyByDate(parsedObject, occupancyStateByCbrId);
                 document.getElementById("csv-legend-contents").innerHTML = extractLegend(csvObject);
-                
-                for (const element of uploadButtons) {
-                element.addEventListener("click", (event) => uploadCsvAndOccupancyCheckMonthFirst(event, csvObject, parsedObject, roomOccupancyByDate), { once: true });
-            }
-            }
 
-           
+                for (const element of uploadButtons) {
+                    element.addEventListener("click", (event) => uploadCsvAndOccupancyCheckMonthFirst(event, csvObject, parsedObject, roomOccupancyByDate), { once: true });
+                }
+            }
 
         } else {
             hiddenDiv.classList.add('d-none');    // Hide it again
@@ -248,6 +255,105 @@ async function handleFileSelection(event) {
 
 }
 
+async function handleMultipleFileSelection(event) {
+
+
+
+    const files = Array.from(event.target.files); // Convert FileList to a standard Array
+
+    // Validate file existence and type
+    if (files.length == 0) {
+        const alertElement = document.getElementById("alert-element-multiple");
+        alertElement.classList.remove('d-none');
+        document.getElementById("alert-text-multiple").innerText = `Please select at least one file`;
+
+        return;
+    }
+    const spinnerMultiple = document.getElementById('uploadBtnSpinnerMultiple');
+    let uploaded_files = 0;
+    for (const file of files) {
+
+        let roomOccupancyByDate = {};
+
+        let csvObject = { 'csvName': null, csvString: null};
+
+        csvObject.csvName = file.name;
+
+        if (!file.type.startsWith("text")) {
+            const alertElement = document.getElementById("alert-element-multiple");
+            alertElement.classList.remove('d-none');
+            document.getElementById("alert-text-multiple").innerText += `${csvObject.csvName}: Unsupported file type, skipping file.\n`;
+
+            continue;
+        }
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        //const allowedExtensions = [''];
+
+        if (extension !== 'csv') {
+            const alertElement = document.getElementById("alert-element-multiple");
+            alertElement.classList.remove('d-none');
+            document.getElementById("alert-text-multiple").innerText += `${csvObject.csvName}: File extension must be csv, skipping file.\n`;
+
+            continue;
+        } else {
+            const reader = new FileReader();
+
+            reader.onload = async () => {
+                csvObject.csvString = reader.result;
+
+                if (csvObject.csvString) {
+                    //hiddenDiv.classList.remove('d-none'); // Show the div
+                    hiddenDivMultiple.classList.remove('d-none'); // Show the div
+                    //document.getElementById("csv-contents").innerHTML = csvToHtmlTable(csvObject);
+                    let result = null;
+                    let parsedObject = {};
+                    [result, parsedObject] = parseCsv(csvObject);
+                    if (result !== "success") {
+                        const alertElement = document.getElementById("alert-element-multiple");
+                        alertElement.classList.remove('d-none');
+                        document.getElementById("alert-text-multiple").innerText += `${csvObject.csvName}: ${result}, skipping file.`;
+
+                    } else {
+                        //document.getElementById("parsed-csv-contents").innerHTML = parsedObjectToHtmlTable(parsedObject);
+                        const occupancyStateByCbrId = await getOccupancyStateByCbrId();
+                        //document.getElementById("occupancy-data-contents").innerHTML = parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId);
+                        roomOccupancyByDate = parsedObjectToOccupancyByDate(parsedObject, occupancyStateByCbrId);
+                        //document.getElementById("csv-legend-contents").innerHTML = extractLegend(csvObject);
+
+                        uploadCsvAndOccupancyForMultiple(null, csvObject, parsedObject, roomOccupancyByDate);
+
+                        uploaded_files += 1;
+                        multipleMessage.innerText = `Uploaded ${uploaded_files} out of ${files.length} files`;
+                        
+                        // for (const element of uploadButtons) {
+                        //     element.addEventListener("click", (event) => uploadCsvAndOccupancyCheckMonthFirst(event, csvObject, parsedObject, roomOccupancyByDate), { once: true });
+                        // }
+                    }
+
+                } else {
+                    //hiddenDivMultiple.classList.add('d-none');    // Hide it again
+                };
+
+
+            };
+            reader.onerror = () => {
+                alert("Error reading the file. Please try again.", "error");
+            };
+            reader.readAsText(file);
+        }
+        
+    }
+    
+    spinnerMultiple.classList.add("d-none");    
+
+
+    // Read the file
+
+
+
+
+}
 const previewButtons = document.getElementsByClassName("preview-button");
 
 for (const element of previewButtons) {
@@ -265,14 +371,14 @@ async function uploadCsvAndOccupancyCheckMonthFirst(event, csvObject, parsedObje
 
     const spinner = document.getElementById('uploadBtnSpinner');
     const data = await checkIfMonthExists(parsedObject.csvMonth);
-   
-    if (data.exists){
+
+    if (data.exists) {
         //let result = confirm("Are you sure you want to replace this csv?");
         const confirmed = await showConfirmModal("A csv for this month has already been uploaded, do you want to replace this csv and its occupancy data?");
-        if (confirmed){
-                
-            const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, csvObject.csvString, roomOccupancyByDate);
-        
+        if (confirmed) {
+
+            const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, parsedObject.csvDateGenerated, csvObject.csvString, roomOccupancyByDate);
+
             const alertElement = document.getElementById("alert-element");
             alertElement.classList.remove('d-none');
             document.getElementById("alert-text").innerText = `Replaced existing occupancy data for the month of ${parsedObject.csvMonth}`;
@@ -280,25 +386,63 @@ async function uploadCsvAndOccupancyCheckMonthFirst(event, csvObject, parsedObje
             const uploadsTableBody = uploadsTable.getElementsByTagName("tbody")[0];
             uploadsTable.querySelector(`[data-id="${data.data.id}"]`).remove();
             uploadsTableBody.innerHTML += makeUploadHtml(csvData);
-        
+
             document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
-          
+
         }
     } else {
-        const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, csvObject.csvString, roomOccupancyByDate);
+        const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, parsedObject.csvDateGenerated, csvObject.csvString, roomOccupancyByDate);
         const uploadsTable = document.getElementById('uploadsTable')
         const uploadsTableBody = uploadsTable.getElementsByTagName("tbody")[0];
         uploadsTableBody.innerHTML += makeUploadHtml(csvData);
-    
+
         document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
-          
+
     }
     spinner.classList.add("d-none");
     hiddenDiv.classList.add('d-none');
 
 }
 
-async function uploadCsvandOccupancy(csvName, csvMonth, csvString, roomOccupancyByDate) {
+async function uploadCsvAndOccupancyForMultiple(event, csvObject, parsedObject, roomOccupancyByDate) {
+
+    
+    const data = await checkIfMonthExists(parsedObject.csvMonth);
+
+    if (data.exists) {
+        //let result = confirm("Are you sure you want to replace this csv?");
+        //const confirmed = await showConfirmModal("A csv for this month has already been uploaded, do you want to replace this csv and its occupancy data?");
+        //if (confirmed) {
+        if (true){
+
+            const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, parsedObject.csvDateGenerated, csvObject.csvString, roomOccupancyByDate);
+
+            const alertElement = document.getElementById("alert-element-multiple");
+            alertElement.classList.remove('d-none');
+            document.getElementById("alert-text-multiple").innerText += `Replaced existing occupancy data for the month of ${parsedObject.csvMonth}\n`;
+            const uploadsTable = document.getElementById('uploadsTable')
+            const uploadsTableBody = uploadsTable.getElementsByTagName("tbody")[0];
+            uploadsTable.querySelector(`[data-id="${data.data.id}"]`).remove();
+            uploadsTableBody.innerHTML += makeUploadHtml(csvData);
+
+            document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
+
+        }
+    } else {
+        const csvData = await uploadCsvandOccupancy(csvObject.csvName, parsedObject.csvMonth, parsedObject.csvDateGenerated, csvObject.csvString, roomOccupancyByDate);
+        const uploadsTable = document.getElementById('uploadsTable')
+        const uploadsTableBody = uploadsTable.getElementsByTagName("tbody")[0];
+        uploadsTableBody.innerHTML += makeUploadHtml(csvData);
+
+        document.getElementById("upload-table-count").innerText = `Showing ${uploadsTableBody.rows.length} of ${uploadsTableBody.rows.length} uploads`
+
+    }
+    
+    //hiddenDivMultiple.classList.add('d-none');
+
+}
+
+async function uploadCsvandOccupancy(csvName, csvMonth, csvDateGenerated, csvString, roomOccupancyByDate) {
     try {
         const csvResponse = await fetch(`/api/csvs`, {
             method: 'POST',
@@ -306,8 +450,8 @@ async function uploadCsvandOccupancy(csvName, csvMonth, csvString, roomOccupancy
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'text/plain'
             },
-        
-            body: JSON.stringify({csvName, csvMonth, csvString})
+
+            body: JSON.stringify({ csvName, csvMonth, csvDateGenerated, csvString })
         });
 
         const csvData = await csvResponse.json();
@@ -318,21 +462,21 @@ async function uploadCsvandOccupancy(csvName, csvMonth, csvString, roomOccupancy
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'text/plain'
             },
-        
-            body: JSON.stringify({roomOccupancyByDate})
+
+            body: JSON.stringify({ roomOccupancyByDate })
         });
         //console.log(roomOccupancyByDate);
         const occupancyData = await occupancyResponse.json();
-   
-        return csvData;     
 
-        
+        return csvData;
+
+
     } catch (error) {
         console.error('Network Error:', error);
     }
 }
 // async function uploadOccupancy(roomOccupancyByDate) {
-   
+
 //     try {
 //         const response = await fetch(`/api/occupancy/batch`, {
 //             method: 'POST',
@@ -382,7 +526,9 @@ function csvToHtmlTable(csvObject) {
     //const cleanedString = csvString.replace(regex, '');
 
     //const rows = csvString.trim().split("\n");
-    const rows = csvObject.csvString.trim().split("\n");
+    const data = csvObject.csvString.replace(/"(.*?)"/g, (str) => str.replaceAll(',', '###COMMA###'));
+
+    const rows = data.trim().split("\n");
     //const rows = cleanedString.trim().split("\n");
     let html = `<div class="table-responsive">\n`;
     html += `<table class="table table-bordered">\n`;
@@ -398,7 +544,8 @@ function csvToHtmlTable(csvObject) {
             // Use <th> for the first header row, <td> for everything else
             //const tag = (index === 0) ? "th" : "td";
             //html += `    <${tag}>${cell.trim()}</${tag}>\n`;
-            html += `<td>${cell.trim()}</td>\n`;
+            const data = cell.replaceAll('###COMMA###', ',');
+            html += `<td>${data.trim()}</td>\n`;
         });
 
         html += `</tr>\n`;
@@ -471,35 +618,48 @@ function extractLegend(csvObject) {
     }
 }
 
+
 function parseCsv(csvObject) {
 
     let result = null;
-    let parsedObject = {'csvMonth': null, csvHeader: {}, csvRows: {}};
+    let parsedObject = {csvDateGenerated: null, 'csvMonth': null, csvHeader: {}, csvRows: {} };
 
-    const rows = csvObject.csvString.trim().split("\n");
+    //const rows = csvObject.csvString.trim().split("\n");
+
+    const data = csvObject.csvString.replace(/"(.*?)"/g, (str) => str.replaceAll(',', '###COMMA###'));
+
+    const rows = data.trim().split("\n");
     //const rows = cleanedString.trim().split("\n");
     //let message = "";
-    let otherRows = [];
+    //let otherRows = [];
     let dataRows = [];
     let headerRows = [];
     //let dateRows = [];
     rows.forEach((row, index) => {
-
         if (row.toLowerCase().startsWith("room")) {
             dataRows.push(row)
         } else if (row.includes("1,2,3")) {
             headerRows.push(row)
             // } else if (cleanRow.includes("Date")) {
             //   dateRows.push(cleanRow)
-        } else if (row) {
-            otherRows.push(row)
+        } else if (index==1) {
+            // Split row by comma (note: simple split works if values aren't quoted with commas)
+            const cells = row.split(',');
+            let dateCell = cells.find(cell => cell.trim() !== '');
+            // Check if the string begins and ends with a double quote
+            if (dateCell.startsWith('"') && dateCell.endsWith('"')) {
+                dateCell = dateCell.slice(1, -1);
+            }
+            parsedObject.csvDateGenerated = dateCell.replaceAll('###COMMA###', ',');
+            //console.log(parsedObject.csvDateGenerated);
+
         }
     });
     const headers = headerRows[0].split(',').map(header => header.trim());
 
     // Get eg Jun and 26 from Jun-26
 
-    const monthYear = headers[0].replace(/[\s/_,]+/g, '-');
+    const monthYear = headers[0].replace(/[\s/_]+/g, '-');
     const parts = monthYear.split('-').map(part => part.trim());
     const firstPart = convertMonthToNumber(parts[0]);
     const secondPart = convertMonthToNumber(parts[1]);
@@ -512,7 +672,7 @@ function parseCsv(csvObject) {
         month = secondPart;
         year = convertYearTo4digits(parts[1]);
     } else if (firstPart !== null && !secondPart !== null) {
-        result =  `ambiguous date format in first cell of date row: ${monthYearString}`;
+        result = `ambiguous date format in first cell of date row: ${monthYearString}`;
         return [result, null];
     } else {
         result = `unrecognized date format in first cell of date row: ${monthYearString}`;
@@ -538,10 +698,10 @@ function parseCsv(csvObject) {
         const roomId = cells[0].replaceAll(" ", "_").trim();;
 
         cells.forEach((cell, index) => {
-            
+
             if (index == 0) {
                 parsedObject.csvRows[roomId] = {};
-        
+
             } else if (cell) {
                 parsedObject.csvRows[roomId][index - 1] = cell.trim();
             }
@@ -584,7 +744,7 @@ async function getOccupancyStateByCbrId() {
 
         const occupancyByCsvId = {}
         occupancyStates.forEach(state => {
-            occupancyByCsvId[state.cbr_id] = {"id":state.id,"state": state.state};
+            occupancyByCsvId[state.cbr_id] = { "id": state.id, "state": state.state };
         });
         return occupancyByCsvId;
     } catch (error) {
@@ -594,7 +754,7 @@ async function getOccupancyStateByCbrId() {
 async function checkIfMonthExists(csvMonth) {
     //console.log(occupancyData)
     try {
-        
+
         const response = await fetch(`/api/csvs/check/${csvMonth}`);
 
         if (!response.ok) {
@@ -604,7 +764,7 @@ async function checkIfMonthExists(csvMonth) {
 
         // will be null if csv for this month not in database
         return data;
-     
+
     } catch (error) {
         console.error('Network Error:', error);
     }
@@ -624,7 +784,7 @@ function parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId) {
     });
 
     html += `</tr></thead>\n`;
-    if (occupancyStateByCbrId){
+    if (occupancyStateByCbrId) {
         for (const [key, row] of Object.entries(parsedObject.csvRows)) {
             // console.log(`${key}: ${value}`);
             html += `<tr><td class="text-nowrap freeze-col">${key}</td>\n`;
@@ -636,7 +796,7 @@ function parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId) {
             html += `</tr>\n`;
         };
     } else {
-         for (const [key, row] of Object.entries(parsedObject.csvRows)) {
+        for (const [key, row] of Object.entries(parsedObject.csvRows)) {
             // console.log(`${key}: ${value}`);
             html += `<tr><td class="text-nowrap freeze-col">${key}</td>\n`;
             Object.values(row).forEach(value => {
@@ -644,10 +804,10 @@ function parsedObjectToHtmlTable(parsedObject, occupancyStateByCbrId) {
                 html += `<td>${value}</td>\n`;
 
             });
-        html += `</tr>\n`;
+            html += `</tr>\n`;
         };
     }
-    
+
 
     html += `</table>\n`;
     html += `</div>\n`;
@@ -661,7 +821,7 @@ function parsedObjectToOccupancyByDate(parsedObject, occupancyStateByCbrId) {
     for (const [key, value] of Object.entries(parsedObject.csvHeader)) {
         occupancyByDate[value] = {};
         for (const [roomId, row] of Object.entries(parsedObject.csvRows)) {
-            occupancyByDate[value][roomId]= occupancyStateByCbrId[row[key]].id;
+            occupancyByDate[value][roomId] = occupancyStateByCbrId[row[key]].id;
         };
     };
 
