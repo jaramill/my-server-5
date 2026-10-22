@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Expose the bootstrap-icons folder to a public URL path
-app.use('/icons', express.static(path.join(__dirname, 'node_modules/bootstrap-icons/font')));
+//app.use('/icons', express.static(path.join(__dirname, 'node_modules/bootstrap-icons/font')));
 
 
 // Initialize SQLite Database (Using ':memory:' for demo, use 'users.db' to persist data)
@@ -23,6 +23,7 @@ const db = new sqlite3.Database(':memory:', (err) => {
         initializeDatabase();
     }
 });
+
 
 // Create table and insert seed data
 function initializeDatabase() {
@@ -185,6 +186,38 @@ function initializeDatabase() {
         console.log('Database initialized with seed data.');
     });
 }
+// just to refresh page every 10 minutes so that render doesn't go to sleep
+
+const lastUpdated = Date.now() // Track when data last changed
+
+app.get('/retrieve-last-updated', (req, res) => {
+//   const clientLastUpdated = parseInt(req.query.lastUpdated, 10);
+
+
+//   // Get the current date and set the time to 00:00:00 (start of today)
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0);
+//   // Check if the last update occurred before today
+//   if (db.lastUpdated < today) {
+//     assignCleaningStateToTurnoverAndCheckedOutRooms();
+//     db.lastUpdated = Date.now();
+//   }
+
+//   if (clientLastUpdated && clientLastUpdated >= db.lastUpdated) {
+//     return res.status(304).end();
+//   }
+//   res.status(200).json({
+//     //data: response,
+//     data: db.roomstateById,
+//     lastUpdated: db.lastUpdated,
+//   });
+    res.status(200).json({
+    //data: response,
+    data: db.roomstateById,
+    lastUpdated: lastUpdated,
+   });
+
+});
 
 //to test spinner
 // app.use((req, res, next) => {

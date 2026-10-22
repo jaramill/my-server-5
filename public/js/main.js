@@ -1,9 +1,71 @@
 const currentDateString = dateToDateString(new Date());
 
+let localLastUpdated = 0; // Tracks the freshness of client data
+
+const POLL_INTERVAL = 600000; // 600 seconds = 10 min
+const MAX_FAILURES = 3;     // Stop polling after 3 failed attempts
+let pollIntervalId = null;
+let consecutiveErrors = 0;
+async function startPolling() {
+	pollIntervalId = setInterval(async () => {
+		//retrieveRoomState();
+        retrieveLastUpdated();
+	}, POLL_INTERVAL);
+}
+
+function stopPolling() {
+	if (pollIntervalId) {
+		clearInterval(pollIntervalId);
+		pollIntervalId = null;
+	}
+}
+
+async function retrieveLastUpdated() {
+	try {
+		const response = await fetch('/retrieve-last-updated');
+
+		if (response.status === 200) {
+			const result = await response.json();
+
+			// Update local storage and UI
+			localLastUpdated = result.lastUpdated;
+
+			// if (result.data) {
+			// 	Object.entries(result.data).forEach(([key, value]) => { goToState(key, value, 'false', 0) });
+			// }
+
+			// console.log("UI Updated with fresh data.");
+
+		// } else if (response.status === 304) {
+		// 	console.log("No changes detected. DOM skipped.");
+		}
+		// Reset error count on success and handle data
+		consecutiveErrors = 0;
+		// handleData(await response.json());
+
+	} catch (error) {
+		consecutiveErrors++;
+		console.error(`Polling failed ${consecutiveErrors} time(s).`, error);
+
+		// Stop polling if server is unreachable
+		if (consecutiveErrors >= MAX_FAILURES) {
+			stopPolling();
+			console.log('Polling stopped: Server is down or unreachable.');
+			// const div = document.getElementById("connectivity-message");
+			// div.style.display = "flex";
+			// div.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+			// document.getElementById("CharOverride-connectivity-message").textContent = 'Lost connection to server'; 
+			//document.body.style.backgroundColor = "grey";
+		}
+	}
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     //console.log("DOM fully parsed and ready!");
     const specificSheet = document.getElementById("theme-styles").sheet;
+
+    // just so render doesn't go to sleep
+    startPolling();
 
     const occupancyStates = await fetchOccupancyStates();
     const cleaningStates = await fetchCleaningStates();
@@ -36,8 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
         specificSheet.insertRule(cssRule, specificSheet.cssRules.length);
     });
-
-    
 
     //let cssRules = "";
     cleaningStates.forEach(state => {
